@@ -1,0 +1,40 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+  <constant name="struts.devMode" value="true"/>
+  <constant name="struts.multipart.maxSize" value="10485760"/>
+  <constant name="struts.multipart.saveDir" value="/uploads"/>
+  <package name="default" namespace="/" extends="struts-default">
+    <action name="showForm" class="com.example.actions.ShowFormAction">
+      <result name="success">/submit-assignment.jsp</result>
+    </action>
+
+    <action name="submitAssignment" class="com.example.actions.SubmitAssignmentAction" method="execute">
+      <interceptor-ref name="defaultStack">
+        <param name="fileUpload.allowedTypes">application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document</param>
+        <param name="fileUpload.maximumSize">10485760</param>
+      </interceptor-ref>
+      <result name="success">/success.jsp</result>
+      <result name="input">/failure.jsp</result>
+      <result name="error">/failure.jsp</result>
+    </action>
+
+    <action name="viewSubmissions" class="com.example.actions.ViewSubmissionsAction">
+      <result name="success">/view-submissions.jsp</result>
+    </action>
+
+    <action name="profile" class="com.example.actions.ProfileAction">
+      <result name="success">/profile.jsp</result>
+    </action>
+
+    <action name="exportCsv" class="com.example.actions.ExportCSVAction">
+      <result name="success" type="stream">
+        <param name="contentType">text/csv</param>
+        <param name="inputName">inputStream</param>
+        <param name="contentDisposition">attachment;filename=submissions.csv</param>
+        <param name="bufferSize">1024</param>
+      </result>
+    </action>
+  </package>
+</struts>
